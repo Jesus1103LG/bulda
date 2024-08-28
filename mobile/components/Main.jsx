@@ -1,10 +1,9 @@
-import { Slot } from "expo-router";
 import { Text, View } from "react-native";
 
-export default function Layout() {
+export default function Main() {
   return (
     <View className="flex-1 justify-center items-center">
-      <Slot />
+      <Text>Login</Text>
     </View>
   );
 }
