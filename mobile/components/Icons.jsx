@@ -1,4 +1,3 @@
-import * as React from "react";
 import Svg, { Ellipse, Path } from "react-native-svg";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 
@@ -6,12 +5,13 @@ export const HomeIcon = (props) => {
   return <FontAwesome5 name="home" size={24} color="black" {...props} />;
 };
 
-export const LogoIcon = (props) => (
+export const LogoIcon = ({ width, height, ...props }) => (
   <Svg
     xmlns="http://www.w3.org/2000/svg"
     xmlSpace="preserve"
-    width={120}
-    height={120}
+    width={width || 120}
+    height={height || 120}
+    viewBox="0 0 120 120"
     {...props}
   >
     <Ellipse
