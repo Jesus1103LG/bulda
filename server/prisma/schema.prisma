@@ -27,8 +27,8 @@ model Cliente {
   email          String           @unique
   password       String
   create_at      DateTime         @default(now())
-  direccion      Direccion        @relation(fields: [direccionId], references: [id])
-  direccionId    Int
+  direccion      Direccion?       @relation(fields: [direccionId], references: [id])
+  direccionId    Int?
   VentaToCliente VentaToCliente[]
 }
 
