@@ -18,3 +18,116 @@ model Prueba {
   name String?
   age  Int?
 }
+
+model Cliente {
+  cedula         String           @id
+  firstName      String
+  lastName       String?
+  phoneNumber    String?          @unique
+  email          String           @unique
+  password       String
+  create_at      DateTime         @default(now())
+  direccion      Direccion        @relation(fields: [direccionId], references: [id])
+  direccionId    Int
+  VentaToCliente VentaToCliente[]
+}
+
+model Company {
+  id                Int                 @id @default(autoincrement())
+  name              String
+  phoneNumber       String?             @unique
+  email             String              @unique
+  password          String
+  create_at         DateTime            @default(now())
+  direccion         Direccion           @relation(fields: [direccionId], references: [id])
+  direccionId       Int
+  CompanyToProducto CompanyToProducto[]
+}
+
+model Estado {
+  id        Int         @id @default(autoincrement())
+  name      String
+  direccion Direccion[]
+}
+
+model Ciudad {
+  id        Int         @id @default(autoincrement())
+  name      String
+  direccion Direccion[]
+}
+
+model Direccion {
+  id           Int       @id @default(autoincrement())
+  calle        String
+  codigoPostal String
+  nrCasa       String
+  cliente      Cliente[]
+  estado       Estado    @relation(fields: [estadoId], references: [id])
+  estadoId     Int
+  ciudad       Ciudad    @relation(fields: [ciudadId], references: [id])
+  ciudadId     Int
+  Company      Company[]
+}
+
+model Producto {
+  id                  Int                   @id @default(autoincrement())
+  name                String
+  VentaToProducto     VentaToProducto[]
+  CompanyToProducto   CompanyToProducto[]
+  CategoriaToProducto CategoriaToProducto[]
+}
+
+model Categoria {
+  id                  Int                   @id @default(autoincrement())
+  name                String
+  CategoriaToProducto CategoriaToProducto[]
+}
+
+model Venta {
+  id              Int               @id @default(autoincrement())
+  fecha           DateTime
+  monto           Float
+  VentaToCliente  VentaToCliente[]
+  VentaToProducto VentaToProducto[]
+}
+
+// N to M
+
+model VentaToCliente {
+  venta     Venta   @relation(fields: [ventaId], references: [id])
+  ventaId   Int
+  cliente   Cliente @relation(fields: [clienteCI], references: [cedula])
+  clienteCI String
+
+  @@id([ventaId, clienteCI])
+}
+
+model VentaToProducto {
+  venta      Venta    @relation(fields: [ventaId], references: [id])
+  ventaId    Int
+  producto   Producto @relation(fields: [productoId], references: [id])
+  productoId Int
+  cantidad   Int
+
+  @@id([ventaId, productoId])
+}
+
+model CompanyToProducto {
+  company    Company  @relation(fields: [companyId], references: [id])
+  companyId  Int
+  producto   Producto @relation(fields: [productoId], references: [id])
+  productoId Int
+  precio     Float
+  stock      Int
+
+  @@id([companyId, productoId])
+}
+
+model CategoriaToProducto {
+  categoria   Categoria @relation(fields: [categoriaId], references: [id])
+  categoriaId Int
+  producto    Producto  @relation(fields: [productoId], references: [id])
+  productoId  Int
+
+  @@id([categoriaId, productoId])
+}
