@@ -18,6 +18,22 @@ export class ClienteService {
     });
   }
 
+  async getClienteByEmail(email: string): Promise<Cliente> {
+    return await this.prisma.cliente.findUnique({
+      where: {
+        email,
+      },
+    });
+  }
+
+  async getClienteByPhoneNumber(phoneNumber: string): Promise<Cliente> {
+    return await this.prisma.cliente.findUnique({
+      where: {
+        phoneNumber,
+      },
+    });
+  }
+
   async createCliente(data: Cliente): Promise<Cliente> {
     return await this.prisma.cliente.create({
       data,

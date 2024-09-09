@@ -24,6 +24,31 @@ export class ClienteController {
   @Post()
   async createCliente(@Body() data: Cliente) {
     try {
+      const emailFound = await this.clienteService.getClienteByEmail(
+        data.email,
+      );
+      const phoneNumberFound =
+        await this.clienteService.getClienteByPhoneNumber(data.phoneNumber);
+      const cedulaFound = await this.clienteService.getClienteByCedula(
+        data.cedula,
+      );
+
+      if (cedulaFound)
+        throw new HttpException(
+          `La cedula de identidad ${data.cedula} ya existe.`,
+          409,
+        );
+      if (emailFound)
+        throw new HttpException(
+          `El correo electronico  ${data.email} ya existe.`,
+          409,
+        );
+      if (phoneNumberFound)
+        throw new HttpException(
+          `El numero de telefono  ${data.phoneNumber} ya existe.`,
+          409,
+        );
+
       return await this.clienteService.createCliente(data);
     } catch (error) {
       throw new HttpException(error, 409);
@@ -40,6 +65,31 @@ export class ClienteController {
       );
 
     return cedulaFound;
+  }
+
+  @Get(':email')
+  async getClienteByEmail(@Param('email') email: string) {
+    const emailFound = await this.clienteService.getClienteByEmail(email);
+
+    if (!emailFound)
+      throw new NotFoundException(
+        `EL cliente con el correo ${email} no ha sido encontrado.`,
+      );
+
+    return emailFound;
+  }
+
+  @Get(':phoneNumber')
+  async getClienteByPhoneNumber(@Param('phoneNumber') phoneNumber: string) {
+    const phoneNumberFound =
+      await this.clienteService.getClienteByPhoneNumber(phoneNumber);
+
+    if (!phoneNumberFound)
+      throw new NotFoundException(
+        `EL cliente con el numero de telefono ${phoneNumber} no ha sido encontrado.`,
+      );
+
+    return phoneNumberFound;
   }
 
   @Delete(':cedula')
