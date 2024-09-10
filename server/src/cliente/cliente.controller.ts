@@ -108,9 +108,7 @@ export class ClienteController {
     try {
       return await this.clienteService.updateCliente(cedula, data);
     } catch (error) {
-      throw new NotFoundException(
-        `EL cliente con la cedula de identidad ${cedula} no ha sido encontrado.`,
-      );
+      throw new HttpException(error, 409);
     }
   }
 }
